@@ -1,0 +1,13 @@
+# Archivos generados por IntelliJ IDEA
+.idea/
+*.iml
+
+# Archivos compilados
+out/
+target/
+*.class
+
+# Archivos temporales
+*.log
+.DS_Store
+Thumbs.db
