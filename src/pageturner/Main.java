@@ -46,15 +46,14 @@ public class Main {
         System.out.println("\n1. DATOS REGISTRADOS");
 
         System.out.println("\nCliente:");
-        System.out.println(cliente);
+        cliente.mostrarInfo();
 
         System.out.println("\nLibros:");
-        System.out.println(libroJava);
-        System.out.println(libroUML);
+        libroJava.mostrarInfo();
+        libroUML.mostrarInfo();
 
-        /*
-         * PRUEBA DE VENTA
-         */
+
+        // PRUEBA DE VENTA
 
         System.out.println("\n======================================");
         System.out.println("2. REGISTRO DE VENTA");
@@ -79,20 +78,7 @@ public class Main {
             venta.confirmarVenta();
 
             System.out.println("Venta registrada correctamente.");
-            System.out.println(
-                    "Libro vendido: " +
-                            libroJava.getTitulo()
-            );
-
-            System.out.println(
-                    "Cantidad vendida: " +
-                            venta.getCantidad()
-            );
-
-            System.out.printf(
-                    "Total de la venta: S/ %.2f%n",
-                    venta.calcularTotal()
-            );
+            venta.mostrarInfo();
 
             System.out.println(
                     "Stock después de la venta: " +
@@ -106,9 +92,8 @@ public class Main {
             );
         }
 
-        /*
-         * CONSULTA DE VENTAS E INGRESOS
-         */
+
+        // CONSULTA DE VENTAS E INGRESOS
 
         System.out.println("\n======================================");
         System.out.println("3. REPORTE DEL LIBRO");
@@ -119,9 +104,14 @@ public class Main {
                         libroJava.getTitulo()
         );
 
-        System.out.println(
-                "Unidades vendidas: " +
-                        libroJava.getCantidadVentas()
+            System.out.println(
+                    "Número de ventas: " +
+                            libroJava.getNumeroVentas()
+            );
+
+            System.out.println(
+                    "Unidades vendidas: " +
+                            libroJava.getUnidadesVendidas()
         );
 
         System.out.printf(
@@ -129,9 +119,8 @@ public class Main {
                 libroJava.calcularIngresos()
         );
 
-        /*
-         * PRUEBA DE RESERVA
-         */
+
+        // PRUEBA DE RESERVA
 
         System.out.println("\n======================================");
         System.out.println("4. REGISTRO DE RESERVA");
@@ -139,7 +128,6 @@ public class Main {
 
         Reserva reserva = new Reserva(
                 1,
-                LocalDate.now(),
                 cliente,
                 libroUML
         );
@@ -148,25 +136,7 @@ public class Main {
             reserva.registrar();
 
             System.out.println("Reserva registrada correctamente.");
-            System.out.println(
-                    "Cliente: " +
-                            reserva.getCliente().getNombre()
-            );
-
-            System.out.println(
-                    "Libro reservado: " +
-                            reserva.getLibro().getTitulo()
-            );
-
-            System.out.println(
-                    "Fecha: " +
-                            reserva.getFecha()
-            );
-
-            System.out.println(
-                    "Estado: " +
-                            reserva.getEstado()
-            );
+            reserva.mostrarInfo();
 
         } catch (IllegalStateException error) {
             System.out.println(
@@ -175,9 +145,8 @@ public class Main {
             );
         }
 
-        /*
-         * RESUMEN DEL CLIENTE
-         */
+        
+        // RESUMEN DEL CLIENTE
 
         System.out.println("\n======================================");
         System.out.println("5. RESUMEN DEL CLIENTE");
