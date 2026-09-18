@@ -14,10 +14,10 @@ public class Venta {
     private int cantidad;
     private Cliente cliente;
     private Libro libro;
+    private double precioUnitario;
+    private boolean confirmada;
 
-    /**
-     * Constructor de la clase Venta.
-     */
+    // Constructor de la clase Venta.
     public Venta(
             int idVenta,
             LocalDate fecha,
@@ -25,17 +25,28 @@ public class Venta {
             Cliente cliente,
             Libro libro
     ) {
+
+        // Validaciones de los parámetros de entrada
+        if (idVenta <= 0) {
+            throw new IllegalArgumentException("El identificador de venta debe ser mayor que cero.");
+        }
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad vendida debe ser mayor que cero.");
+        }
+        if (cliente == null || libro == null) {
+            throw new IllegalArgumentException("La venta debe tener un cliente y un libro.");
+        }
+
         this.idVenta = idVenta;
-        this.fecha = fecha;
+        this.fecha = fecha != null ? fecha : LocalDate.now();
         this.cantidad = cantidad;
         this.cliente = cliente;
         this.libro = libro;
+        this.precioUnitario = libro.getPrecio();
+        this.confirmada = false;
     }
 
-    /**
-     * Verifica que la venta tenga datos válidos
-     * y que exista suficiente stock.
-     */
+    // Verifica que la venta tenga datos válidos y que exista suficiente stock.
     public boolean validarStock() {
         return libro != null
                 && cliente != null
@@ -43,14 +54,11 @@ public class Venta {
                 && libro.tieneStock(cantidad);
     }
 
-    /**
-     * Confirma la venta, descuenta el stock y registra
-     * la operación en el cliente y el libro.
-     */
+    // Confirma la venta, descuenta el stock y registra la operación en el cliente y el libro.
     public void confirmarVenta() {
 
         // Evita registrar dos veces la misma venta
-        if (cliente != null && cliente.getVentas().contains(this)) {
+        if (confirmada) {
             throw new IllegalStateException(
                     "La venta ya fue confirmada anteriormente."
             );
@@ -63,23 +71,21 @@ public class Venta {
             );
         }
 
+        // Se fija el precio vigente al momento de confirmar la venta.
+        precioUnitario = libro.getPrecio();
+
         // Descuento automático del stock
         libro.descontarStock(cantidad);
 
         // Registro de la venta en las clases relacionadas
         cliente.agregarVenta(this);
         libro.agregarVenta(this);
+        confirmada = true;
     }
 
-    /**
-     * Calcula el importe total de la venta.
-     */
+    // Calcula el importe total de la venta.
     public double calcularTotal() {
-        if (libro == null) {
-            return 0;
-        }
-
-        return cantidad * libro.getPrecio();
+        return cantidad * precioUnitario;
     }
 
     // Métodos getters y setters
@@ -89,6 +95,10 @@ public class Venta {
     }
 
     public void setIdVenta(int idVenta) {
+        validarNoConfirmada();
+        if (idVenta <= 0) {
+            throw new IllegalArgumentException("El identificador de venta debe ser mayor que cero.");
+        }
         this.idVenta = idVenta;
     }
 
@@ -97,7 +107,8 @@ public class Venta {
     }
 
     public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+        validarNoConfirmada();
+        this.fecha = fecha != null ? fecha : LocalDate.now();
     }
 
     public int getCantidad() {
@@ -105,6 +116,7 @@ public class Venta {
     }
 
     public void setCantidad(int cantidad) {
+        validarNoConfirmada();
         if (cantidad <= 0) {
             throw new IllegalArgumentException(
                     "La cantidad vendida debe ser mayor que cero."
@@ -119,6 +131,10 @@ public class Venta {
     }
 
     public void setCliente(Cliente cliente) {
+        validarNoConfirmada();
+        if (cliente == null) {
+            throw new IllegalArgumentException("El cliente no puede ser nulo.");
+        }
         this.cliente = cliente;
     }
 
@@ -127,21 +143,41 @@ public class Venta {
     }
 
     public void setLibro(Libro libro) {
+        validarNoConfirmada();
+        if (libro == null) {
+            throw new IllegalArgumentException("El libro no puede ser nulo.");
+        }
         this.libro = libro;
+        this.precioUnitario = libro.getPrecio();
     }
 
-    /**
-     * Devuelve un resumen de la venta.
-     */
-    @Override
-    public String toString() {
-        return "Venta{" +
-                "idVenta=" + idVenta +
-                ", fecha=" + fecha +
-                ", cantidad=" + cantidad +
-                ", cliente=" + cliente.getNombre() +
-                ", libro=" + libro.getTitulo() +
-                ", total=" + calcularTotal() +
-                '}';
+    public double getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public boolean isConfirmada() {
+        return confirmada;
+    }
+
+    // Función para mostrar los datos principales de la venta.
+    public void mostrarInfo() {
+        System.out.println("\n======================================");
+        System.out.println("            DATOS DE LA VENTA");
+        System.out.println("======================================");
+        System.out.println("ID venta         : " + idVenta);
+        System.out.println("Fecha            : " + fecha);
+        System.out.println("Cliente          : " + cliente.getNombre());
+        System.out.println("Libro            : " + libro.getTitulo());
+        System.out.println("Cantidad         : " + cantidad);
+        System.out.println("Precio unitario  : S/ " + precioUnitario);
+        System.out.println("Total            : S/ " + calcularTotal());
+        System.out.println("Estado           : " + (confirmada ? "CONFIRMADA" : "PENDIENTE"));
+        System.out.println("======================================");
+    }
+
+    private void validarNoConfirmada() {
+        if (confirmada) {
+            throw new IllegalStateException("No se puede modificar una venta confirmada.");
+        }
     }
 }

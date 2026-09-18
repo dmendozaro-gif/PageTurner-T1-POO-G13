@@ -1,6 +1,7 @@
 package pageturner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,9 +22,7 @@ public class Libro {
     private List<Venta> ventas;
     private List<Reserva> reservas;
 
-    /**
-     * Constructor de la clase Libro.
-     */
+    // Constructor de la clase Libro.    
     public Libro(
             int idLibro,
             String titulo,
@@ -32,60 +31,50 @@ public class Libro {
             double precio,
             int stock
     ) {
-        this.idLibro = idLibro;
-        this.titulo = titulo;
-        this.autor = autor;
-        this.isbn = isbn;
-        this.precio = precio;
-        this.stock = stock;
+        this.idLibro = validarId(idLibro);
+        this.titulo = validarTexto(titulo, "El título no puede estar vacío.");
+        this.autor = validarTexto(autor, "El autor no puede estar vacío.");
+        this.isbn = validarTexto(isbn, "El ISBN no puede estar vacío.");
+        this.precio = validarPrecio(precio);
+        this.stock = validarStockInicial(stock);
 
         // Inicialización de las listas
         this.ventas = new ArrayList<>();
         this.reservas = new ArrayList<>();
     }
 
-    /**
-     * Verifica si existe stock suficiente para una venta.
-     */
+  
+    // Verifica si existe stock suficiente para una venta.
     public boolean tieneStock(int cantidad) {
         return cantidad > 0 && stock >= cantidad;
     }
 
-    /**
-     * Descuenta del stock la cantidad vendida.
-     */
+    // Descuenta del stock la cantidad vendida.
     public void descontarStock(int cantidad) {
         if (!tieneStock(cantidad)) {
             throw new IllegalArgumentException(
                     "No existe stock suficiente para realizar la venta."
             );
         }
-
         stock -= cantidad;
     }
 
-    /**
-     * Agrega una venta al historial del libro.
-     */
+    // Agrega una venta al historial del libro.
     public void agregarVenta(Venta venta) {
-        if (venta != null) {
+        if (venta != null && !ventas.contains(venta)) {
             ventas.add(venta);
         }
     }
 
-    /**
-     * Agrega una reserva a la lista del libro.
-     */
+    // Agrega una reserva a la lista del libro.
     public void agregarReserva(Reserva reserva) {
-        if (reserva != null) {
+        if (reserva != null && !reservas.contains(reserva)) {
             reservas.add(reserva);
         }
     }
 
-    /**
-     * Calcula la cantidad total de unidades vendidas.
-     */
-    public int getCantidadVentas() {
+    // Calcula la cantidad total de unidades vendidas.
+    public int getUnidadesVendidas() {
         int cantidadTotal = 0;
 
         for (Venta venta : ventas) {
@@ -95,9 +84,17 @@ public class Libro {
         return cantidadTotal;
     }
 
-    /**
-     * Calcula el dinero generado por las ventas del libro.
-     */
+    // Devuelve el número de operaciones de venta registradas para este libro.
+    public int getNumeroVentas() {
+        return ventas.size();
+    }
+
+    // Se conserva para compatibilidad. Representa unidades, no operaciones.
+    public int getCantidadVentas() {
+        return getUnidadesVendidas();
+    }
+
+    // Calcula el dinero generado por las ventas del libro.
     public double calcularIngresos() {
         double ingresos = 0;
 
@@ -115,7 +112,7 @@ public class Libro {
     }
 
     public void setIdLibro(int idLibro) {
-        this.idLibro = idLibro;
+        this.idLibro = validarId(idLibro);
     }
 
     public String getTitulo() {
@@ -123,7 +120,7 @@ public class Libro {
     }
 
     public void setTitulo(String titulo) {
-        this.titulo = titulo;
+        this.titulo = validarTexto(titulo, "El título no puede estar vacío.");
     }
 
     public String getAutor() {
@@ -131,7 +128,7 @@ public class Libro {
     }
 
     public void setAutor(String autor) {
-        this.autor = autor;
+        this.autor = validarTexto(autor, "El autor no puede estar vacío.");
     }
 
     public String getIsbn() {
@@ -139,7 +136,7 @@ public class Libro {
     }
 
     public void setIsbn(String isbn) {
-        this.isbn = isbn;
+        this.isbn = validarTexto(isbn, "El ISBN no puede estar vacío.");
     }
 
     public double getPrecio() {
@@ -147,13 +144,7 @@ public class Libro {
     }
 
     public void setPrecio(double precio) {
-        if (precio < 0) {
-            throw new IllegalArgumentException(
-                    "El precio no puede ser negativo."
-            );
-        }
-
-        this.precio = precio;
+        this.precio = validarPrecio(precio);
     }
 
     public int getStock() {
@@ -161,35 +152,57 @@ public class Libro {
     }
 
     public void setStock(int stock) {
-        if (stock < 0) {
-            throw new IllegalArgumentException(
-                    "El stock no puede ser negativo."
-            );
-        }
-
-        this.stock = stock;
+        this.stock = validarStockInicial(stock);
     }
 
     public List<Venta> getVentas() {
-        return ventas;
+        return Collections.unmodifiableList(ventas);
     }
 
     public List<Reserva> getReservas() {
-        return reservas;
+        return Collections.unmodifiableList(reservas);
     }
 
-    /**
-     * Devuelve los datos principales del libro.
-     */
-    @Override
-    public String toString() {
-        return "Libro{" +
-                "idLibro=" + idLibro +
-                ", titulo='" + titulo + '\'' +
-                ", autor='" + autor + '\'' +
-                ", isbn='" + isbn + '\'' +
-                ", precio=" + precio +
-                ", stock=" + stock +
-                '}';
+    // Función para mostrar los datos principales del libro.
+    public void mostrarInfo() {
+        System.out.println("\n======================================");
+        System.out.println("           DATOS DEL LIBRO");
+        System.out.println("======================================");
+        System.out.println("ID      : " + idLibro);
+        System.out.println("Título  : " + titulo);
+        System.out.println("Autor   : " + autor);
+        System.out.println("ISBN    : " + isbn);
+        System.out.println("Precio  : S/ " + precio);
+        System.out.println("Stock   : " + stock);
+        System.out.println("======================================");
+    }
+
+    // Funciones privadas para validar los datos del libro
+    private static int validarId(int idLibro) {
+        if (idLibro <= 0) {
+            throw new IllegalArgumentException("El identificador del libro debe ser mayor que cero.");
+        }
+        return idLibro;
+    }
+
+    private static double validarPrecio(double precio) {
+        if (!Double.isFinite(precio) || precio < 0) {
+            throw new IllegalArgumentException("El precio debe ser un número mayor o igual que cero.");
+        }
+        return precio;
+    }
+
+    private static int validarStockInicial(int stock) {
+        if (stock < 0) {
+            throw new IllegalArgumentException("El stock no puede ser negativo.");
+        }
+        return stock;
+    }
+
+    private static String validarTexto(String valor, String mensaje) {
+        if (valor == null || valor.isBlank()) {
+            throw new IllegalArgumentException(mensaje);
+        }
+        return valor.trim();
     }
 }

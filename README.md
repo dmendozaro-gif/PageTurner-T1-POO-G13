@@ -16,6 +16,9 @@ Sistema desarrollado en Java para gestionar los libros, clientes, ventas y reser
 - Cálculo del total vendido.
 - Consulta de unidades vendidas e ingresos por libro.
 - Registro de reservas para libros sin stock.
+- Métodos `mostrarInfo()` para mostrar datos de forma clara en consola.
+- Validación de datos y protección del historial de ventas y reservas.
+- Conservación del precio unitario de cada venta para reportes históricos.
 
 ## Clases implementadas
 
@@ -39,4 +42,9 @@ Sistema desarrollado en Java para gestionar los libros, clientes, ventas y reser
 
 ## Ejecución
 
-Ejecutar el método `main` ubicado en la clase `Main.java`.
+Desde la raíz del proyecto, ejecutar:
+
+```bash
+javac -d out src/pageturner/*.java
+java -cp out pageturner.Main
+```
