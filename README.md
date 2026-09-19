@@ -6,19 +6,12 @@ Proyecto desarrollado para el curso Técnicas de Programación Orientada a Objet
 
 Sistema desarrollado en Java para gestionar los libros, clientes, ventas y reservas de la librería académica PageTurner.
 
-## Funcionalidades
+## Implementación del modelo
 
-- Registro de clientes.
-- Registro de libros.
-- Control del stock.
-- Registro de ventas.
-- Descuento automático del stock.
-- Cálculo del total vendido.
-- Consulta de unidades vendidas e ingresos por libro.
-- Registro de reservas para libros sin stock.
-- Métodos `mostrarInfo()` para mostrar datos de forma clara en consola.
-- Validación de datos y protección del historial de ventas y reservas.
-- Conservación del precio unitario de cada venta para reportes históricos.
+- Definición de las clases `Cliente`, `Libro`, `Venta` y `Reserva`.
+- Declaración de los atributos, constructores y métodos definidos en el diagrama UML.
+- Comentarios en los métodos que explican la función que realizará cada operación.
+- Clase `Main` con la creación de un cliente y dos libros de ejemplo.
 
 ## Clases implementadas
 
@@ -42,9 +35,8 @@ Sistema desarrollado en Java para gestionar los libros, clientes, ventas y reser
 
 ## Ejecución
 
-Desde la raíz del proyecto, ejecutar:
+1. Abrir el proyecto en IntelliJ IDEA, Visual Studio Code u otro IDE compatible con Java.
+2. Ubicar la clase `Main.java` dentro del paquete `pageturner`.
+3. Ejecutar el método `main`.
 
-```bash
-javac -d out src/pageturner/*.java
-java -cp out pageturner.Main
-```
+El programa creará un cliente y dos libros de ejemplo, mostrando su información en la consola.

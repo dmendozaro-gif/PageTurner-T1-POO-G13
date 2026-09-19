@@ -1,62 +1,44 @@
 package pageturner;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
 
 /**
  * Representa a un cliente de la librería PageTurner.
- * Un cliente puede realizar varias compras y reservas.
  */
-
 public class Cliente {
 
-    // Atributos del cliente
     private int idCliente;
     private String nombre;
     private String dni;
     private String correo;
-
-    // Listas que almacenan las ventas y reservas del cliente
     private List<Venta> ventas;
     private List<Reserva> reservas;
 
-
-   // Constructor de la clase Cliente.
     public Cliente(int idCliente, String nombre, String dni, String correo) {
-        this.idCliente = validarId(idCliente);
-        this.nombre = validarTexto(nombre, "El nombre no puede estar vacío.");
-        this.dni = validarTexto(dni, "El DNI no puede estar vacío.");
-        this.correo = validarCorreo(correo);
-
-        // Las listas se inicializan vacías para evitar valores nulos
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.dni = dni;
+        this.correo = correo;
         this.ventas = new ArrayList<>();
         this.reservas = new ArrayList<>();
     }
 
-    // Agrega una venta al historial del cliente.    
     public void agregarVenta(Venta venta) {
-        if (venta != null && !ventas.contains(venta)) {
-            ventas.add(venta);
-        }
+        // Esta función agregará una venta al historial del cliente.
     }
 
-    // Agrega una reserva al historial del cliente.
     public void agregarReserva(Reserva reserva) {
-        if (reserva != null && !reservas.contains(reserva)) {
-            reservas.add(reserva);
-        }
+        // Esta función agregará una reserva al historial del cliente.
     }
 
-    // Métodos getters y setters
-    
+    // Getters y setters
     public int getIdCliente() {
         return idCliente;
     }
 
     public void setIdCliente(int idCliente) {
-        this.idCliente = validarId(idCliente);
+        this.idCliente = idCliente;
     }
 
     public String getNombre() {
@@ -64,7 +46,7 @@ public class Cliente {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = validarTexto(nombre, "El nombre no puede estar vacío.");
+        this.nombre = nombre;
     }
 
     public String getDni() {
@@ -72,7 +54,7 @@ public class Cliente {
     }
 
     public void setDni(String dni) {
-        this.dni = validarTexto(dni, "El DNI no puede estar vacío.");
+        this.dni = dni;
     }
 
     public String getCorreo() {
@@ -80,18 +62,17 @@ public class Cliente {
     }
 
     public void setCorreo(String correo) {
-        this.correo = validarCorreo(correo);
+        this.correo = correo;
     }
 
     public List<Venta> getVentas() {
-        return Collections.unmodifiableList(ventas);
+        return ventas;
     }
 
     public List<Reserva> getReservas() {
-        return Collections.unmodifiableList(reservas);
+        return reservas;
     }
 
-    // Función para mostrar los datos principales del cliente.
     public void mostrarInfo() {
         System.out.println("\n======================================");
         System.out.println("          DATOS DEL CLIENTE");
@@ -101,28 +82,5 @@ public class Cliente {
         System.out.println("DNI     : " + dni);
         System.out.println("Correo  : " + correo);
         System.out.println("======================================");
-    }
-
-    // Funciones privadas para validar los datos del cliente
-    private static int validarId(int idCliente) {
-        if (idCliente <= 0) {
-            throw new IllegalArgumentException("El identificador del cliente debe ser mayor que cero.");
-        }
-        return idCliente;
-    }
-
-    private static String validarCorreo(String correo) {
-        String correoValidado = validarTexto(correo, "El correo no puede estar vacío.");
-        if (!correoValidado.contains("@")) {
-            throw new IllegalArgumentException("El correo debe contener @.");
-        }
-        return correoValidado;
-    }
-
-    private static String validarTexto(String valor, String mensaje) {
-        if (valor == null || valor.isBlank()) {
-            throw new IllegalArgumentException(mensaje);
-        }
-        return valor.trim();
     }
 }
